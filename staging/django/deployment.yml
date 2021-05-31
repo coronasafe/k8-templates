@@ -1,0 +1,52 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: care-django-staging
+spec:
+  template:
+    metadata:
+      labels:
+        name: care-django-staging
+        app: care-django-staging
+        env: staging
+        namespace: default
+    spec:
+      containers:
+        - name: care
+          image: <ACCOUNT_ID>.dkr.ecr.ap-south-1.amazonaws.com/<REPO>:latest
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: newrelic-ini
+              mountPath: /etc/newrelic.ini
+              subPath: newrelic.ini
+          resources:
+              requests:
+                  memory: "200Mi"
+                  cpu: "200m"
+              limits:
+                  memory: "2000Mi"
+                  cpu: "1"
+          command: 
+            - /start
+          # command: [ "/bin/bash", "-c", "--" ]
+          # args: [ "while true; do sleep 30; done;" ]
+              
+          ports:
+            - containerPort: 9000
+              name: django
+              protocol: TCP
+          envFrom:
+          - configMapRef:
+              name: care-staging
+          - secretRef:
+              name: care-staging
+          env:
+            - name: RESTART_
+              value: "20200331015742"
+      volumes:
+        - name: newrelic-ini
+          secret:
+            secretName: care-staging
+            items:
+              - key: NEWRELIC_INI
+                path: newrelic.ini

@@ -1,0 +1,25 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: care-fe-staging-deployment
+spec:
+  template:
+    metadata:
+      labels:
+        app: care-fe-staging
+    spec:
+      containers:
+        - name: care-fe
+          image: 998532567015.dkr.ecr.ap-south-1.amazonaws.com/care-fe:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+              name: care-fe-staging
+              protocol: TCP
+          resources:
+            requests:
+              memory: "200Mi"
+              cpu: "200m"
+            limits:
+              memory: "2000Mi"
+              cpu: "1"

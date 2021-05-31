@@ -1,0 +1,27 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: care-nginx-staging
+spec:
+  template:
+    metadata:
+      labels:
+        app: care-nginx-staging
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.21
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - mountPath: /etc/nginx/nginx.conf
+          subPath: nginx.conf
+          name: nginx-conf-staging
+      volumes:
+      - name: nginx-conf-staging
+        configMap:
+          name: nginx-conf-staging
+          items:
+            - key: nginx.conf
+              path: nginx.conf
+

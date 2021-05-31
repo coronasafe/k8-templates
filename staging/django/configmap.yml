@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: care-staging
+  labels:
+    app: care
+    env: staging
+    namespace: default
+data:
+  SECRET: 'SECRET'
+
