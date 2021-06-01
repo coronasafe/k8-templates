@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: care-dashboard-deployment
+spec:
+  template:
+    metadata:
+      labels:
+        app: care-dashboard-staging
+    spec:
+      containers:
+        - name: care-dash
+          image: careacr.azurecr.io/coronasafe/care:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+              name: care-dashboard
+              protocol: TCP
+          resources:
+            requests:
+              memory: "200Mi"
+              cpu: "200m"
+            limits:
+              memory: "2000Mi"
+              cpu: "1"
+  selector:
+    matchLabels:
+      app: care-dashboard-staging

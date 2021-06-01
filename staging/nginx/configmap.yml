@@ -81,6 +81,40 @@ data:
           proxy_pass http://care-fe-staging-service;
         }
       }
+      server {
+        listen 80;
+        server_name dashboard.coronasafe.xyz;
+
+       add_header X-XSS-Protection "1; mode=block";
+       add_header X-Frame-Options "SAMEORIGIN";
+       add_header X-Content-Type-Options nosniff;
+       add_header Referrer-Policy "no-referrer, strict-origin-when-cross-origin";
+       add_header Feature-Policy "geolocation 'self' ";
+       add_header Powered-By "Coronasafe Network Volunteers (coronasafe.network)";
+       add_header Support-Email "info@coronasafe.network";
+       add_header Source-Code "github.com/coronasafe";
+       add_header Licence-Type "MIT";
+       add_header Slogan "Made for India By Kerala";
+       add_header Volunteer "volunteers.coronasafe.network";
+       add_header Collaborate-On "slack.coronasafe.in";
+
+        access_log /dev/stdout;
+        error_log /dev/stdout;
+
+        location /api {
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header Host $http_host;
+          proxy_redirect off;
+          proxy_pass http://care-django-staging:9000;
+        }
+
+        location / {
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header Host $http_host;
+          proxy_redirect off;
+          proxy_pass http://care-dashboard-service;
+        }
+      }
     }
 
 
