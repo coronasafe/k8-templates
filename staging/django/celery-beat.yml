@@ -1,4 +1,4 @@
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: care-staging-celery-beat
@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
         - name: care
-          image: <ACCOUNT_ID>.dkr.ecr.ap-south-1.amazonaws.com/<REPO>:latest
+          image: careacr.azurecr.io/coronasafe/care:latest
           imagePullPolicy: Always
           resources:
               requests:
@@ -36,3 +36,8 @@ spec:
           env:
             - name: RESTART_
               value: "20200331015742"
+      imagePullSecrets:
+        - name: acr-secret
+  selector:
+    matchLabels:
+      app: care-staging-celery-beat

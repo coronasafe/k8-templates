@@ -1,4 +1,4 @@
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: care-fe-staging-deployment
@@ -10,7 +10,7 @@ spec:
     spec:
       containers:
         - name: care-fe
-          image: 998532567015.dkr.ecr.ap-south-1.amazonaws.com/care-fe:latest
+          image: careacr.azurecr.io/coronasafe/care_fe:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 80
@@ -23,3 +23,8 @@ spec:
             limits:
               memory: "2000Mi"
               cpu: "1"
+      imagePullSecrets:
+        - name: acr-secret
+  selector:
+    matchLabels:
+      app: care-fe-staging

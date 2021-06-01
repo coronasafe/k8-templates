@@ -1,4 +1,4 @@
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: care-staging-celery-worker
@@ -7,18 +7,14 @@ spec:
     metadata:
       labels:
         name: care-staging-celery-worker
-        app: care--staging-celery-worker
+        app: care-staging-celery-worker
         env: staging
         namespace: default
     spec:
       containers:
         - name: care
-          image: <ACCOUNT_ID>.dkr.ecr.ap-south-1.amazonaws.com/<REPO>:latest
+          image: careacr.azurecr.io/coronasafe/care:latest
           imagePullPolicy: Always
-          volumeMounts:
-            - name: newrelic-ini
-              mountPath: /etc/newrelic.ini
-              subPath: newrelic.ini
           resources:
               requests:
                   memory: "2000Mi"
@@ -40,10 +36,8 @@ spec:
           env:
             - name: RESTART_
               value: "20200331015742"
-      volumes:
-        - name: newrelic-ini
-          secret:
-            secretName: care-staging
-            items:
-              - key: NEWRELIC_INI
-                path: newrelic.ini
+      imagePullSecrets:
+        - name: acr-secret
+  selector:
+    matchLabels:
+      app: care-staging-celery-worker
